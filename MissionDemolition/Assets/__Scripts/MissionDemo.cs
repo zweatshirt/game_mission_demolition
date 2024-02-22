@@ -17,10 +17,19 @@ public class MissionDemo : MonoBehaviour {
 
 
     [Header( "Set in Inspector" )]
-    public TextMeshProUGUI uitLevel; // The UIText_Level Text
-    public TextMeshProUGUI uitShots; // The UIText_Shots Text
-    public TextMeshProUGUI uitButton; // The Text on UIButton_View 
-    private Vector3 castlePos = new Vector3(28f, -9.5f, 0f); // The place to put castles 
+    // The UIText_Level Text
+    public TextMeshProUGUI uitLevel; 
+
+     // The UIText_Shots Text
+    public TextMeshProUGUI uitShots; 
+
+    // The Text on UIButton_View 
+    public TextMeshProUGUI uitButton; 
+
+    // The place to put castles 
+    private Vector3 castlePos = new Vector3(28f, -9.5f, 0f);
+    
+    // shift castle to the right by this amt each new level
     private float shiftCastleVal = 2f;
 
 
@@ -82,15 +91,17 @@ public class MissionDemo : MonoBehaviour {
 
     void UpdateGUI() {
         // Show the data in the GUITexts
-        uitLevel.text = "Level: " +(level + 1)+ " of " +levelMax; 
+        uitLevel.text = "Level: " + (level + 1)+ " of " + levelMax; 
         uitShots.text = "Shots Taken: " + shotsTaken + " of " + maxShots;
     }
 
 
     void Update() { 
         UpdateGUI();
+
         // Check for level end
-        if ( (mode == GameMode.playing) && Goal.goalMet ) { // Change mode to stop checking for level end
+        // Change mode to stop checking for level end
+        if ( (mode == GameMode.playing) && Goal.goalMet ) {
             mode = GameMode.levelEnd;
 
             // Zoom out
@@ -102,13 +113,19 @@ public class MissionDemo : MonoBehaviour {
         else if (mode == GameMode.playing && !Goal.goalMet) {
 
             // End game if the max shots have been taken
+            // This is... an iffy way to do this
             if (shotsTaken == maxShots && !FollowCam.POI)
                  SceneManager.LoadScene(1);
+            else if (shotsTaken > maxShots) {
+                SceneManager.LoadScene(1);
+            }
 
         }
+
     }
     
 
+    // Update level
     void NextLevel() {
         level++;
 
@@ -116,12 +133,17 @@ public class MissionDemo : MonoBehaviour {
             level = 0;
         }
         StartLevel();
+
     }
 
 
-    public void SwitchView( string eView ="" ) {
+    // switch view on button press
+    // option 1: close up of slingshot
+    // option 2: close up of castle
+    // option 3: zoomed out view of both slingshot and castle
+    public void SwitchView(string eView ="") {
 
-        if (eView =="") {
+        if (eView == "") {
             eView = uitButton.text;
         }
 
@@ -144,9 +166,11 @@ public class MissionDemo : MonoBehaviour {
                 uitButton.text = "Show Slingshot";
                 break;
         } 
+
     }
     // Static method that allows code anywhere to increment shotsTaken 
     public static void ShotFired() { // d
         S.shotsTaken++;
     }
+    
 }

@@ -17,6 +17,8 @@ public class FollowCam : MonoBehaviour {
     public float volume;
     public float minVolume;
     public float maxVolume;
+    public float minVelocityMag;
+    public float maxVelocityMag;
     public float normalizedMagnitude;
 
 
@@ -28,6 +30,8 @@ public class FollowCam : MonoBehaviour {
         wind.playOnAwake = false;
         minVolume = 0f;
         maxVolume = 1f;
+        minVelocityMag = 1f;
+        maxVelocityMag = 1f;
     }
     
     void FixedUpdate () {
@@ -59,7 +63,6 @@ public class FollowCam : MonoBehaviour {
 
                 // if it is sleeping (that is, not moving)
                 if ( POI.GetComponent<Rigidbody>().IsSleeping() ) {
-
                     // return to default view
                     POI = null ;
                     wind.Stop();
@@ -84,14 +87,30 @@ public class FollowCam : MonoBehaviour {
         Camera.main.orthographicSize = destination.y + 10;
     }
 
+
+    // updates wind volume based on projectile velocity
     void changeWindVolume()  {
-        normalizedMagnitude = rb.velocity.magnitude / 100f; 
-        Debug.Log(normalizedMagnitude);
+
+        float magnitude = rb.velocity.magnitude; 
+        if (magnitude < minVelocityMag) {
+            minVelocityMag = magnitude;
+        }
+
+        if (rb.velocity.magnitude > maxVelocityMag) {
+            maxVelocityMag = magnitude;
+        }
+
+        normalizedMagnitude = 
+            (magnitude - minVelocityMag) / (maxVelocityMag - minVelocityMag); 
+
+        Debug.Log("Velocity magnitude normalized: " + normalizedMagnitude);
+
         if (normalizedMagnitude <= 1) {
             this.volume = Mathf.Lerp(minVolume, maxVolume, normalizedMagnitude);
             wind.volume = this.volume;
-            Debug.Log(this.volume);
+            Debug.Log("Volume: " + this.volume);
         }
+
     }
 
 }
