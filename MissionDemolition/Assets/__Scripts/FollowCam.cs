@@ -16,8 +16,7 @@ public class FollowCam : MonoBehaviour {
     public float volume;
     public float minVolume;
     public float maxVolume;
-    public float magnitude;
-    public float normalizedVelMag;
+    public float normalizedMagnitude;
 
 
     void Awake() {
@@ -50,7 +49,7 @@ public class FollowCam : MonoBehaviour {
             if (POI.tag == "Projectile" ) {
                 rb = POI.GetComponent<Rigidbody>();
 
-                if (destination.x > 0 && windPlayed == false)  {
+                if (destination.x > -10 && windPlayed == false)  {
                     wind.Play();
                     windPlayed = true;
                 }
@@ -85,9 +84,13 @@ public class FollowCam : MonoBehaviour {
     }
 
     void changeWindVolume()  {
-        normalizedVelMag = rb.velocity.normalized.magnitude; 
-        this.volume = Mathf.Lerp(minVolume, maxVolume, normalizedVelMag);
-        wind.volume = this.volume;
+        normalizedMagnitude = rb.velocity.magnitude / 100f; 
+        Debug.Log(normalizedMagnitude);
+        if (normalizedMagnitude <= 1) {
+            this.volume = Mathf.Lerp(minVolume, maxVolume, normalizedMagnitude);
+            wind.volume = this.volume;
+            Debug.Log(this.volume);
+        }
     }
 
 }
