@@ -13,7 +13,8 @@ public enum GameMode { // b
 
 public class MissionDemo : MonoBehaviour {
 
-    static private MissionDemo S; // a private Singleton
+    private static MissionDemo S; // a private Singleton
+
 
     [Header( "Set in Inspector" )]
     public TextMeshProUGUI uitLevel; // The UIText_Level Text
@@ -32,10 +33,14 @@ public class MissionDemo : MonoBehaviour {
     public GameMode mode = GameMode.idle;
     public string showing = "Show Slingshot" ; // FollowCam mode
 
+    
+
+
     void Start() {
         S = this; // Define the Singleton
         level = 0;
         levelMax = castles.Length; 
+
         StartLevel();
     }
 
