@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
+
 public class FollowCam : MonoBehaviour {
     public static GameObject POI; // The static point of interest // a
     

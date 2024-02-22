@@ -20,8 +20,10 @@ public class MissionDemo : MonoBehaviour {
     public TextMeshProUGUI uitLevel; // The UIText_Level Text
     public TextMeshProUGUI uitShots; // The UIText_Shots Text
     public TextMeshProUGUI uitButton; // The Text on UIButton_View 
-    private Vector3 castlePos1 = new Vector3(35f, -9.5f, 0f); // The place to put castles 
-    private Vector3 castlePos2 = new Vector3(40f, -9.5f, 0f);
+    private Vector3 castlePos = new Vector3(28f, -9.5f, 0f); // The place to put castles 
+    private float shiftCastleVal = 2f;
+
+
     public GameObject[] castles; // An array of the castles
     public int maxShots = 7;
 
@@ -58,8 +60,12 @@ public class MissionDemo : MonoBehaviour {
         // Instantiate the new castle
         castle = Instantiate< GameObject>( castles[level] );
 
-        castle.transform.position = (level <= 4) ? castlePos1 : castlePos2;
-        
+        if (level > 1) {
+            castlePos.x += shiftCastleVal;
+        }
+
+        castle.transform.position = castlePos;
+
         shotsTaken = 0;
 
         // Reset the camera
