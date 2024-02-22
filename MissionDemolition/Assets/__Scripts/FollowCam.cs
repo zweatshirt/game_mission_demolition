@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class FollowCam : MonoBehaviour {
-    static public GameObject POI; // The static point of interest // a
+    public static GameObject POI; // The static point of interest // a
 
     [Header("Set in Inspector")] 
     public float easing = 0.05f;
@@ -10,6 +10,7 @@ public class FollowCam : MonoBehaviour {
 
     [Header("Set Dynamically")]
     public float camZ; // The desired Z pos of the camera
+   
 
     void Awake() {
         camZ = this.transform.position.z;
@@ -34,8 +35,12 @@ public class FollowCam : MonoBehaviour {
             if (POI.tag == "Projectile" ) {
                 // if it is sleeping (that is, not moving)
                 if ( POI.GetComponent<Rigidbody>().IsSleeping() ) {
+
                     // return to default view
                     POI =null ;
+
+                    
+
                     // in the next update
                     return ;
                 }

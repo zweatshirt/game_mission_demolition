@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI; // a
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public enum GameMode { // b 
     idle,
@@ -18,8 +19,10 @@ public class MissionDemo : MonoBehaviour {
     public TextMeshProUGUI uitLevel; // The UIText_Level Text
     public TextMeshProUGUI uitShots; // The UIText_Shots Text
     public TextMeshProUGUI uitButton; // The Text on UIButton_View 
-    public Vector3 castlePos; // The place to put castles 
+    private Vector3 castlePos1 = new Vector3(35f, -9.5f, 0f); // The place to put castles 
+    private Vector3 castlePos2 = new Vector3(40f, -9.5f, 0f);
     public GameObject[] castles; // An array of the castles
+    public int maxShots = 7;
 
     [Header( "Set Dynamically" )]
     public int level; // The current level
@@ -49,7 +52,9 @@ public class MissionDemo : MonoBehaviour {
 
         // Instantiate the new castle
         castle = Instantiate< GameObject>( castles[level] );
-        castle.transform.position = castlePos;
+
+        castle.transform.position = (level <= 4) ? castlePos1 : castlePos2;
+        
         shotsTaken = 0;
 
         // Reset the camera
@@ -67,7 +72,7 @@ public class MissionDemo : MonoBehaviour {
     void UpdateGUI() {
         // Show the data in the GUITexts
         uitLevel.text = "Level: " +(level + 1)+ " of " +levelMax; 
-        uitShots.text = "Shots Taken: " + shotsTaken;
+        uitShots.text = "Shots Taken: " + shotsTaken + " of " + maxShots;
     }
 
 
@@ -76,10 +81,19 @@ public class MissionDemo : MonoBehaviour {
         // Check for level end
         if ( (mode == GameMode.playing) && Goal.goalMet ) { // Change mode to stop checking for level end
             mode = GameMode.levelEnd;
+
             // Zoom out
             SwitchView("Show Both" );
+
             // Start the next level in 2 seconds 
             Invoke("NextLevel", 2f);
+        }
+        else if (mode == GameMode.playing && !Goal.goalMet) {
+
+            // End game if the max shots have been taken
+            if (shotsTaken == maxShots && !FollowCam.POI)
+                 SceneManager.LoadScene(1);
+
         }
     }
     

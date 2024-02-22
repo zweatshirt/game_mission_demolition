@@ -339,6 +339,7 @@
 -r:"Library/Bee/artifacts/200b0aE.dag/UnityEngine.UI.ref.dll"
 "Assets/__Scripts/Cloud.cs"
 "Assets/__Scripts/CloudCrafter.cs"
+"Assets/__Scripts/EndGame.cs"
 "Assets/__Scripts/FollowCam.cs"
 "Assets/__Scripts/Goal.cs"
 "Assets/__Scripts/MissionDemo.cs"
