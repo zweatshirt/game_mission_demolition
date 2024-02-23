@@ -8,6 +8,10 @@ public class Slingshot : MonoBehaviour {
     public GameObject prefabProjectile; 
     public float velocityMult = 8f;
     public AudioSource thwoop;
+    public LineRenderer lineRenderer;
+    public GameObject initialPosition1;
+    public GameObject initialPosition2;
+    public GameObject midPosition;
 
     [Header("Set Dynamically")]
     public GameObject launchPoint; 
@@ -15,6 +19,8 @@ public class Slingshot : MonoBehaviour {
     public GameObject projectile;
     public bool aimingMode;
     private Rigidbody projectileRigidbody;
+
+
     static public Vector3 LAUNCH_POS { 
         get {
             if (S == null ) return Vector3.zero; 
@@ -26,6 +32,12 @@ public class Slingshot : MonoBehaviour {
 
     void Start() {
         thwoop.playOnAwake = false;
+        // initialPosition1 = GameObject.Find("InitialRubberPosition1");
+        // initialPosition2 = GameObject.Find("InitialRubberPosition2");
+        lineRenderer.SetPosition(0, initialPosition1.transform.position);
+        lineRenderer.SetPosition(1, midPosition.transform.position);
+        lineRenderer.SetPosition(2, initialPosition2.transform.position);
+
     }
 
 
@@ -35,6 +47,8 @@ public class Slingshot : MonoBehaviour {
         launchPoint = launchPointTrans.gameObject; 
         launchPoint.SetActive( false );
         launchPos = launchPointTrans.position;
+        // lineRenderer = GetComponent<LineRenderer>();
+        
     }
 
 
@@ -46,7 +60,7 @@ public class Slingshot : MonoBehaviour {
 
     void OnMouseExit() {
         //print("Slingshot:OnMouseExit()"); 
-        launchPoint.SetActive( false ); 
+        launchPoint.SetActive(false); 
     }
 
 
@@ -85,6 +99,7 @@ public class Slingshot : MonoBehaviour {
         // Move the projectile to this new position
         Vector3 projPos = launchPos + mouseDelta;
         projectile.transform.position = projPos;
+        lineRenderer.SetPosition(1, projPos);
         if ( Input.GetMouseButtonUp(0) ) {
             // The mouse has been released
             aimingMode = false;
@@ -92,10 +107,9 @@ public class Slingshot : MonoBehaviour {
             projectileRigidbody.isKinematic = false; 
             projectileRigidbody.velocity = -mouseDelta * velocityMult; 
             FollowCam.POI = projectile;
-            
+            lineRenderer.SetPosition(1, midPosition.transform.position);
             MissionDemo.ShotFired();
             ProjectileLine.S.poi = projectile;
-
             projectile = null;
         } 
     }
