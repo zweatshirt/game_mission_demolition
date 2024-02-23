@@ -343,6 +343,7 @@
 "Assets/__Scripts/FollowCam.cs"
 "Assets/__Scripts/Goal.cs"
 "Assets/__Scripts/MissionDemo.cs"
+"Assets/__Scripts/Music.cs"
 "Assets/__Scripts/ProjectileLine.cs"
 "Assets/__Scripts/RigidbodySleep.cs"
 "Assets/__Scripts/Slingshot.cs"
